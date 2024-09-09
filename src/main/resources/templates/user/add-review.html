@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review</title>
+
+    <!-- Add Bootstrap CSS link -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Add custom styles here if needed */
+        body {
+            padding: 20px;
+        }
+
+        .back-link {
+            margin-top: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add a Review</h2>
+    <form th:action="@{/books/addReview}" method="post">
+        <input type="hidden" id="bookId" name="bookId" th:value="${bookId}" />
+        <!-- Assuming 'bookId' is a parameter passed to this page indicating the book being reviewed -->
+
+        <div class="form-group">
+            <label for="text">Review Comment:</label>
+            <textarea class="form-control" id="text" name="text" rows="4" cols="50" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Review</button>
+    </form>
+</div>
+
+<a th:href="@{/books}" class="back-link">Back to Index</a>
+
+<!-- Add Bootstrap JS and Popper.js (optional) for advanced features -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
