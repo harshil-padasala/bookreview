@@ -49,11 +49,15 @@ jobs:
         push: true
         tags: harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}
 
-    - name: Kubectl Action
-      uses: tale/kubectl-action@v1
-      with:
-        base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+    - name: Create local changes
+      run: |
+        sed -i 's|image: harshilpadasala/booksreview:.*|harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}|' app-deployment.yaml
 
-    - run: |
-        kubectl apply -f app-deployment.yaml
-        kubectl apply -f app-service.yaml
+    - name: Commit & Push changes
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        author_email: github@action.com
+        author_name: github-action
+        branch: dev
+        message: Updating Image version in K8s Deployment file 
