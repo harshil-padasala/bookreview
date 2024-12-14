@@ -1,0 +1,57 @@
+
+For OSS Maintainers: VEX Notice
+--------------------------------
+If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+Learn more and start using VEX: https://aquasecurity.github.io/trivy/v0.58/docs/supply-chain/vex/repo#publishing-vex-documents
+
+To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+
+
+pom.xml (pom)
+=============
+Total: 10 (UNKNOWN: 0, LOW: 0, MEDIUM: 8, HIGH: 1, CRITICAL: 1)
+
+┌───────────────────────────────────────────────────┬────────────────┬──────────┬────────┬───────────────────┬──────────────────────────────────────────────┬─────────────────────────────────────────────────────────────┐
+│                      Library                      │ Vulnerability  │ Severity │ Status │ Installed Version │                Fixed Version                 │                            Title                            │
+├───────────────────────────────────────────────────┼────────────────┼──────────┼────────┼───────────────────┼──────────────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework.security:spring-security-core │ CVE-2024-38810 │ MEDIUM   │ fixed  │ 6.3.1             │ 6.3.2                                        │ spring-security: Missing Authorization When Using           │
+│                                                   │                │          │        │                   │                                              │ @AuthorizeReturnObject                                      │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38810                  │
+├───────────────────────────────────────────────────┼────────────────┼──────────┤        │                   ├──────────────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework.security:spring-security-web  │ CVE-2024-38821 │ CRITICAL │        │                   │ 5.7.13, 5.8.15, 6.2.7, 6.0.13, 6.1.11, 6.3.4 │ Spring-WebFlux: Authorization Bypass of Static Resources in │
+│                                                   │                │          │        │                   │                                              │ WebFlux Applications                                        │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38821                  │
+├───────────────────────────────────────────────────┼────────────────┼──────────┤        ├───────────────────┼──────────────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-beans                  │ CVE-2024-38827 │ MEDIUM   │        │ 6.1.11            │ 6.1.14                                       │ spring-security: authorization bypass for case sensitive    │
+│                                                   │                │          │        │                   │                                              │ comparisons                                                 │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38827                  │
+├───────────────────────────────────────────────────┼────────────────┤          │        │                   │                                              ├─────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-context                │ CVE-2024-38820 │          │        │                   │                                              │ The fix for CVE-2022-22968 made disallowedFieldspatterns in │
+│                                                   │                │          │        │                   │                                              │ DataBinder ...                                              │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38820                  │
+│                                                   ├────────────────┤          │        │                   │                                              ├─────────────────────────────────────────────────────────────┤
+│                                                   │ CVE-2024-38827 │          │        │                   │                                              │ spring-security: authorization bypass for case sensitive    │
+│                                                   │                │          │        │                   │                                              │ comparisons                                                 │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38827                  │
+├───────────────────────────────────────────────────┤                │          │        │                   │                                              │                                                             │
+│ org.springframework:spring-core                   │                │          │        │                   │                                              │                                                             │
+│                                                   │                │          │        │                   │                                              │                                                             │
+│                                                   │                │          │        │                   │                                              │                                                             │
+├───────────────────────────────────────────────────┤                │          │        │                   │                                              │                                                             │
+│ org.springframework:spring-expression             │                │          │        │                   │                                              │                                                             │
+│                                                   │                │          │        │                   │                                              │                                                             │
+│                                                   │                │          │        │                   │                                              │                                                             │
+├───────────────────────────────────────────────────┤                │          │        │                   │                                              │                                                             │
+│ org.springframework:spring-jdbc                   │                │          │        │                   │                                              │                                                             │
+│                                                   │                │          │        │                   │                                              │                                                             │
+│                                                   │                │          │        │                   │                                              │                                                             │
+├───────────────────────────────────────────────────┼────────────────┤          │        │                   ├──────────────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-web                    │ CVE-2024-38809 │          │        │                   │ 5.3.38, 6.0.23, 6.1.12                       │ org.springframework:spring-web: Spring Framework DoS via    │
+│                                                   │                │          │        │                   │                                              │ conditional HTTP request                                    │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38809                  │
+├───────────────────────────────────────────────────┼────────────────┼──────────┤        │                   ├──────────────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-webmvc                 │ CVE-2024-38816 │ HIGH     │        │                   │ 6.1.13                                       │ spring-webmvc: Path Traversal Vulnerability in Spring       │
+│                                                   │                │          │        │                   │                                              │ Applications Using RouterFunctions and FileSystemResource   │
+│                                                   │                │          │        │                   │                                              │ https://avd.aquasec.com/nvd/cve-2024-38816                  │
+└───────────────────────────────────────────────────┴────────────────┴──────────┴────────┴───────────────────┴──────────────────────────────────────────────┴─────────────────────────────────────────────────────────────┘
