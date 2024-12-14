@@ -56,13 +56,14 @@ jobs:
 
     - name: Create local changes
       run: |
-        sed -i 's|image: harshilpadasala/booksreview:.*|harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}|' app-deployment.yaml
+        sed -i 's|image: harshilpadasala/booksreview:.*|image: harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}|' app-deployment.yaml
 
     - name: Commit & Push changes
-      uses: actions-js/push@master
+      uses: EndBug/add-and-commit@v9
       with:
         github_token: ${{ secrets.GIT_TOKEN }}
+        add: app-deployment.yaml
         author_email: github@action.com
         author_name: github-action
-        branch: dev
+        push: origin dev --set-upstream
         message: Updating Image version in K8s Deployment file 
