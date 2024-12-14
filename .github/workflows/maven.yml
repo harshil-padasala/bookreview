@@ -31,6 +31,12 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONARQUBE_SERVER_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST_URL }}
 
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
 
