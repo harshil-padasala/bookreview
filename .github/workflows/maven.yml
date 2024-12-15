@@ -56,13 +56,13 @@ jobs:
 
     - name: Create local changes
       run: |
-        sed -i 's|image: harshilpadasala/booksreview:.*|image: harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}|' app-deployment.yaml
+        sed -i 's|image: harshilpadasala/booksreview:.*|image: harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}|' manifest/postgresql/app-deployment.yml
 
     - name: Commit & Push changes
       uses: EndBug/add-and-commit@v9
       with:
         github_token: ${{ secrets.GIT_TOKEN }}
-        add: app-deployment.yaml
+        add: manifest/postgresql/app-deployment.yml
         author_email: github@action.com
         author_name: github-action
         push: origin ${{ github.ref_name }} --set-upstream
