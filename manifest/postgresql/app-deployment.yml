@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booksreview-postgresql
+  labels:
+    app: booksreview
+    db: postgresql
+spec:
+  selector:
+    matchLabels:
+      app: booksreview
+      db: postgresql
+  replicas: 2
+  template:
+    metadata:
+      name: booksreview-postgresql
+      labels:
+        app: booksreview
+        db: postgresql
+    spec:
+      containers:
+        - image: harshilpadasala/booksreview:v1
+          name: booksreview
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: postgresql
+            - name: SPRING_SQL_INIT_MODE
+              value: always
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgresql-service:5432/booksreview
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: org.postgresql.Driver
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-db-password
+                  key: db-password
