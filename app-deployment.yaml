@@ -16,7 +16,7 @@ spec:
         app: booksreview
     spec:
       containers:
-        - image: harshilpadasala/booksreview:9-1734151604808
+        - image: harshilpadasala/booksreview:main-12337302990
           name: booksreview
           imagePullPolicy: Always
           ports:
