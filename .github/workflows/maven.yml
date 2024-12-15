@@ -1,0 +1,69 @@
+name: Java CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Trivy File System Scan
+      run: trivy fs --format table -o fs.html .
+
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@v4.1.0
+      env:
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_SERVER_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST_URL }}
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}
+
+    - name: Create local changes
+      run: |
+        sed -i 's|image: harshilpadasala/booksreview:.*|image: harshilpadasala/booksreview:${{ github.ref_name }}-${{ github.run_id }}|' app-deployment.yaml
+
+    - name: Commit & Push changes
+      uses: EndBug/add-and-commit@v9
+      with:
+        github_token: ${{ secrets.GIT_TOKEN }}
+        add: app-deployment.yaml
+        author_email: github@action.com
+        author_name: github-action
+        push: origin ${{ github.ref_name }} --set-upstream
+        message: Updating Image version in K8s Deployment file 
