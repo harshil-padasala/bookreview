@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-deploy
+  labels:
+    database: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      database: postgresql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: postgresql-pod
+      labels:
+        database: postgresql
+    spec:
+      containers:
+        - image: postgres:17-alpine
+          name: postgresql
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-db-password
+                  key: db-password
+          volumeMounts:
+            - name: postgresql-db-creation
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: postgresql-db-creation
+          configMap:
+            name: booksreview-db-creation-script
