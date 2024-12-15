@@ -62,7 +62,7 @@ jobs:
       uses: EndBug/add-and-commit@v9
       with:
         github_token: ${{ secrets.GIT_TOKEN }}
-        add: app-deployment.yaml
+        add: manifest/postgresql/app-deployment.yml
         author_email: github@action.com
         author_name: github-action
         push: origin ${{ github.ref_name }} --set-upstream
