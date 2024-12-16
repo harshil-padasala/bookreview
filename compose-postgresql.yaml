@@ -1,0 +1,44 @@
+services:
+  # postgresql Service
+  postgresql:
+    image: postgres:17-alpine
+    container_name: postgres-container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: springboot_db
+      POSTGRES_USER: springboot_user
+      POSTGRES_PASSWORD: springboot_password
+    networks:
+      - postgres-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U springboot_user" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Spring Boot Application
+  springboot-app:
+    image: harshilpadasala/booksreview:v1
+    container_name: springboot-app-container
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/springboot_db
+      SPRING_DATASOURCE_USERNAME: springboot_user
+      SPRING_DATASOURCE_PASSWORD: springboot_password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_SQL_INIT_MODE: always
+      SPRING_SQL_INIT_SCHEMA_LOCATIONS: classpath:postgresql/schema.sql
+      SPRING_SQL_INIT_DATA_LOCATIONS: classpath:postgresql/data.sql
+      SPRING_PROFILES_ACTIVE: postgresql
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - postgres-network
+
+# Network for the services
+networks:
+  postgres-network:
+    driver: bridge
