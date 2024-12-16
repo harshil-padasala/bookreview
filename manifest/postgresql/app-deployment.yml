@@ -19,7 +19,7 @@ spec:
         db: postgresql
     spec:
       containers:
-        - image: harshilpadasala/booksreview:main-12357076314
+        - image: harshilpadasala/booksreview:main-12357829477
           name: booksreview
           imagePullPolicy: Always
           ports:
