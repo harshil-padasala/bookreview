@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: booksreview-service
+  labels:
+    app: booksreview
+    db: mysql
+spec:
+  type: LoadBalancer
+  selector:
+      app: booksreview
+      db: mysql
+  ports:
+    - port: 80
+      targetPort: 8080
