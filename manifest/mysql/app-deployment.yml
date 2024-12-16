@@ -1,23 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: booksreview-postgresql
+  name: booksreview-mysql
   labels:
     app: booksreview
-    db: postgresql
+    db: mysql
 spec:
   selector:
     matchLabels:
       app: booksreview
-      db: postgresql
+      db: mysql
   replicas: 2
   template:
     metadata:
-      name: booksreview-postgresql
+      name: booksreview-mysql
       labels:
         app: booksreview
-        db: postgresql
+        db: mysql
     spec:
+      initContainers:
+        - name: init-db
+          image: busybox:1.31
+          command: [ 'sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql-service 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";' ]
       containers:
         - image: harshilpadasala/booksreview:main-12357076314
           name: booksreview
@@ -26,17 +30,17 @@ spec:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: postgresql
+              value: mysql
             - name: SPRING_SQL_INIT_MODE
               value: always
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgresql-service:5432/booksreview
+              value: jdbc:mysql://mysql-service:3306/booksreview
             - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
-              value: org.postgresql.Driver
+              value: com.mysql.cj.jdbc.Driver
             - name: SPRING_DATASOURCE_USERNAME
-              value: postgres
+              value: root
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql-db-password
+                  name: mysql-db-password
                   key: db-password

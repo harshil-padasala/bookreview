@@ -1,0 +1,45 @@
+services:
+  # MySQL Service
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: springboot_db
+      MYSQL_USER: springboot_user
+      MYSQL_PASSWORD: springboot_password
+    networks:
+      - mysql-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Spring Boot Application
+  springboot-app:
+    image: harshilpadasala/booksreview:v1
+    container_name: springboot-app-container
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springboot_db
+      SPRING_DATASOURCE_USERNAME: springboot_user
+      SPRING_DATASOURCE_PASSWORD: springboot_password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_SQL_INIT_MODE: always
+      SPRING_SQL_INIT_SCHEMA_LOCATIONS: classpath:mysql/schema.sql
+      SPRING_SQL_INIT_DATA_LOCATIONS: classpath:mysql/data.sql
+      SPRING_PROFILES_ACTIVE: mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - mysql-network
+
+# Network for the services
+networks:
+  mysql-network:
+    driver: bridge
