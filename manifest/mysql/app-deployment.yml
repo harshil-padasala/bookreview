@@ -23,7 +23,7 @@ spec:
           image: busybox:1.31
           command: [ 'sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql-service 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";' ]
       containers:
-        - image: harshilpadasala/booksreview:dev-12357427630
+        - image: harshilpadasala/booksreview:dev-12357716239
           name: booksreview
           imagePullPolicy: Always
           ports:
